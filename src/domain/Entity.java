@@ -10,22 +10,13 @@ import java.util.List;
 public class Entity {
 
     private final String mid;
-    private final String id;
-    private final String name;
-    private final double score;
 
     public Entity(JSONObject entityJson) throws JSONException {
         mid = entityJson.getString("mid");
-        id = entityJson.getString("id");
-        name = entityJson.getString("name");
-        score = entityJson.getDouble("score");
     }
 
     protected Entity(Entity entity) {
         mid = entity.getMid();
-        id = entity.getId();
-        name = entity.getName();
-        score = entity.getScore();
     }
 
     public static List<Entity> buildListFromApiResultJsonString(String content) {
@@ -46,18 +37,6 @@ public class Entity {
 
     public String getMid() {
         return mid;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public double getScore() {
-        return score;
     }
 
 }

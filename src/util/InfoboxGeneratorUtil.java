@@ -6,6 +6,7 @@ import domain.EntityType;
 import domain.infobox.InfoBox;
 import domain.infobox.TitleInfoBoxRegion;
 import domain.infobox.SimpleTextInfoBoxRegion;
+import domain.infobox.WrappingTextInfoBoxRegion;
 
 import java.util.List;
 
@@ -51,7 +52,16 @@ public class InfoboxGeneratorUtil {
 
     private static void addPersonRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
         infoBox.addRegion(new SimpleTextInfoBoxRegion("Birthday", entityProperties.getBirthday()));
+
+        String deathInfo = entityProperties.getDeathInfo();
+        if (deathInfo != null) {
+            infoBox.addRegion(new SimpleTextInfoBoxRegion("Death", deathInfo));
+        }
+
         infoBox.addRegion(new SimpleTextInfoBoxRegion("Place of birth", entityProperties.getPlaceOfBirth()));
+        infoBox.addRegion(new WrappingTextInfoBoxRegion("Descriptions", entityProperties.getDescriptions()));
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Siblings", entityProperties.getSiblings()));
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Spouses", entityProperties.getSpouses()));
     }
 
 }
