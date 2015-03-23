@@ -9,7 +9,7 @@ public class InfoBox {
 
     private static final int NUM_INDENT_SPACES = 10;
     private static final int REGION_INDENT = 17;
-    private static final int REGION_LENGTH = 81;
+    private static final int REGION_LENGTH = 82;
     private static final String BOUNDARY = "|";
     private final List<InfoBoxRegion> regions = new LinkedList<InfoBoxRegion>();
 

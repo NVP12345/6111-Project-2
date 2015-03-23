@@ -39,6 +39,24 @@ public class InfoboxGeneratorUtil {
             switch (entityType) {
                 case PERSON:
                     addPersonRegionsToInfoBox(infoBox, entityProperties);
+                    break;
+                case AUTHOR:
+                    addAuthorRegionsToInfoBox(infoBox, entityProperties);
+                    break;
+                case ACTOR:
+                    addActorRegionsToInfoBox(infoBox, entityProperties);
+                    break;
+                case BUSINESS_PERSON:
+                    addBusinessPersonRegionsToInfoBox(infoBox, entityProperties);
+                    break;
+                case LEAGUE:
+                    addLeagueRegionsToInfoBox(infoBox, entityProperties);
+                    break;
+                case SPORTS_TEAM:
+                    addSportsTeamRegionsToInfoBox(infoBox, entityProperties);
+                    break;
+                default:
+                    throw new RuntimeException("Unsupported entity type: " + entityType.name());
             }
         }
         System.out.print(infoBox);
@@ -64,4 +82,26 @@ public class InfoboxGeneratorUtil {
         infoBox.addRegion(new SimpleTextInfoBoxRegion("Spouses", entityProperties.getSpouses()));
     }
 
+    private static void addAuthorRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Books", entityProperties.getBooks()));
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Influenced By", entityProperties.getInfluencedBy()));
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Books about", entityProperties.getBooksAbout()));
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Influenced", entityProperties.getInfluenced()));
+    }
+
+    private static void addActorRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
+
+    }
+
+    private static void addBusinessPersonRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
+
+    }
+
+    private static void addLeagueRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
+
+    }
+
+    private static void addSportsTeamRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
+
+    }
 }

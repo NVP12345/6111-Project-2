@@ -102,7 +102,11 @@ public class EntityProperties {
     }
 
     private String getSimpleProperty(String type, String propertyName) {
-        return getSimplePropertyList(type, propertyName).get(0);
+        List<String> properties = getSimplePropertyList(type, propertyName);
+        if (properties == null) {
+            return null;
+        }
+        return properties.get(0);
     }
 
     private List<String> getSimplePropertyList(String type, String propertyName) {
@@ -124,19 +128,7 @@ public class EntityProperties {
     }
 
     public List<String> getDescriptions() {
-        JSONObject articleProperty = propertiesByType.get("/common/topic/article");
-        try {
-            JSONArray valueArray = articleProperty.getJSONArray("values");
-            List<String> descriptions = new LinkedList<String>();
-            for (int i = 0; i < valueArray.length(); i++) {
-                JSONObject value = valueArray.getJSONObject(i);
-                EntityProperties articleEntityProperties = FreebaseApiUtil.entityPropertiesFromMid(value.getString("id"));
-                descriptions.add(articleEntityProperties.getDocumentText());
-            }
-            return descriptions;
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+        return getSimplePropertyList("/common/topic/description", "value");
     }
 
     public List<String> getSiblings() {
@@ -234,5 +226,21 @@ public class EntityProperties {
         }
 
         return String.format("%s at %s, cause: %s", dateOfDeath, placeOfDeath, causeOfDeath);
+    }
+
+    public List<String> getBooks() {
+        return getSimplePropertyList("/book/author/works_written", "text");
+    }
+
+    public List<String> getInfluencedBy() {
+        return getSimplePropertyList("/influence/influence_node/influenced_by", "text");
+    }
+
+    public List<String> getBooksAbout() {
+        return getSimplePropertyList("/book/book_subject/works", "text");
+    }
+
+    public List<String> getInfluenced() {
+        return getSimplePropertyList("/influence/influence_node/influenced", "text");
     }
 }
