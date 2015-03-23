@@ -18,7 +18,7 @@ c)The language used for the implementation of this code is Java. The main file t
 Usage:
 
 $ ant
-$ java -cp "FeedbackBing.jar:lib/*" FeedbackBing <client-key> <precision> <'query'>
+$ java -cp "Proj2.jar:lib/*" Project2Main -key <freebase API key> -q <'query'> -t <infobox|question>
 
 d)
 

@@ -44,9 +44,9 @@ public class Project2Main {
         FreebaseApiUtil.setFreebaseApiKey(freebaseApiKey);
 
         if ("infobox".equals(type)) {
-            InfoboxGeneratorUtil.generateInfobox(freebaseApiKey, query);
+            InfoboxGeneratorUtil.generateInfobox(query);
         } else if ("question".equals(type)) {
-            QuestionAnswerUtil.answerQuestion(freebaseApiKey, query);
+            QuestionAnswerUtil.answerQuestion(query);
         } else {
             System.out.format("Error: Unknown type '%s'\n", type);
             System.exit(1);

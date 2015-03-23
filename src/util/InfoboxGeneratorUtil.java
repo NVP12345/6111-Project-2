@@ -11,9 +11,7 @@ import java.util.List;
 
 public class InfoboxGeneratorUtil {
 
-    public static void generateInfobox(String freebaseApiKey, String query) {
-        System.out.format("generateInfobox with key %s and query '%s'\n", freebaseApiKey, query);
-
+    public static void generateInfobox(String query) {
         List<Entity> entities = FreebaseApiUtil.getEntitiesFromQuery(query);
         printInfoBoxForFirstValidEntity(entities);
     }
