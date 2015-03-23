@@ -13,7 +13,7 @@ b)The following is a list of all the files that we are submitting:
                  README.txt
 
 
-c)The language used for the implementation of this code is Java. The main file that should be executed is FeedbackBing.java. 
+c)The language used for the implementation of this code is Java. The main file that should be executed is Project2Main.java.
 
 Usage:
 
