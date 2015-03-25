@@ -6,7 +6,7 @@ public class Project2Main {
 
     public static void main(String[] args) {
         if (args.length < 6) {
-            System.out.println("Usage: java Proj2 -key <Freebase API key> -q <query> -t <infobox|question>");
+            System.out.println("Usage: java Proj2 -key <Freebase API key> -q <'query'> -t <infobox|question>");
             System.exit(1);
         }
 
