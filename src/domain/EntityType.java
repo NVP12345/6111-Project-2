@@ -2,8 +2,8 @@ package domain;
 
 public enum EntityType {
     PERSON,
-    AUTHOR,
     ACTOR,
+    AUTHOR,
     BUSINESS_PERSON,
     LEAGUE,
     SPORTS_TEAM

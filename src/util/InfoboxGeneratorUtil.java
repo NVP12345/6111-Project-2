@@ -115,10 +115,35 @@ public class InfoboxGeneratorUtil {
     }
 
     private static void addLeagueRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
-
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Sport", entityProperties.getLeagueSport()));
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Official Website", entityProperties.getOfficialWebsite()));
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Championship", entityProperties.getChampionship()));
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Teams", entityProperties.getTeams()));
+        infoBox.addRegion(new WrappingTextInfoBoxRegion("Description", entityProperties.getDescriptions()));
     }
 
     private static void addSportsTeamRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
-
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Sport", entityProperties.getTeamSport()));
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Arena", entityProperties.getTeamArena()));
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Championships", entityProperties.getTeamChampionShips()));
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Founded", entityProperties.getTeamFounded()));
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Leagues", entityProperties.getTeamLeagues()));
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Locations", entityProperties.getTeamLocations()));
+        infoBox.addRegion(new ColumnInfoBoxRegion(
+                "Coaches",
+                entityProperties.getTeamCoaches(),
+                "Name",
+                "Position",
+                "From / To"
+        ));
+        infoBox.addRegion(new ColumnInfoBoxRegion(
+                "PlayersRoster",
+                entityProperties.getTeamPlayers(),
+                "Name",
+                "Position",
+                "Number",
+                "From / To"
+        ));
+        infoBox.addRegion(new WrappingTextInfoBoxRegion("Description", entityProperties.getDescriptions()));
     }
 }

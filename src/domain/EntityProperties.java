@@ -46,27 +46,23 @@ public class EntityProperties {
                 propertiesByType.put(key, propertiesJson.getJSONObject(key));
             }
 
-            try {
-                JSONObject typeProperty = propertiesByType.get("/type/object/type");
-                JSONArray typeArray = typeProperty.getJSONArray("values");
-                Set<EntityType> uniqueEntityTypes = new HashSet<EntityType>();
-                for (int i = 0; i < typeArray.length(); i++) {
-                    JSONObject type = typeArray.getJSONObject(i);
-                    String typeId = type.getString("id");
-                    if (FREEBASE_TYPES_TO_ENTITY_TYPES.containsKey(typeId)) {
-                        uniqueEntityTypes.add(FREEBASE_TYPES_TO_ENTITY_TYPES.get(typeId));
-                    }
+            JSONObject typeProperty = propertiesByType.get("/type/object/type");
+            JSONArray typeArray = typeProperty.getJSONArray("values");
+            Set<EntityType> uniqueEntityTypes = new HashSet<EntityType>();
+            for (int i = 0; i < typeArray.length(); i++) {
+                JSONObject type = typeArray.getJSONObject(i);
+                String typeId = type.getString("id");
+                if (FREEBASE_TYPES_TO_ENTITY_TYPES.containsKey(typeId)) {
+                    uniqueEntityTypes.add(FREEBASE_TYPES_TO_ENTITY_TYPES.get(typeId));
                 }
-                entityTypes = new LinkedList<EntityType>(uniqueEntityTypes);
-                Collections.sort(entityTypes, new Comparator<EntityType>() {
-                    @Override
-                    public int compare(EntityType o1, EntityType o2) {
-                        return o1.ordinal() - o2.ordinal();
-                    }
-                });
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
             }
+            entityTypes = new LinkedList<EntityType>(uniqueEntityTypes);
+            Collections.sort(entityTypes, new Comparator<EntityType>() {
+                @Override
+                public int compare(EntityType o1, EntityType o2) {
+                    return o1.ordinal() - o2.ordinal();
+                }
+            });
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -123,7 +119,7 @@ public class EntityProperties {
             }
             return values;
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            return null;
         }
     }
 
@@ -145,7 +141,7 @@ public class EntityProperties {
                 siblings.add(siblingValue.getString("text"));
             }
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            return null;
         }
         return siblings;
     }
@@ -195,7 +191,7 @@ public class EntityProperties {
                 spouses.add(sb.toString());
             }
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            return null;
         }
         return spouses;
     }
@@ -250,6 +246,9 @@ public class EntityProperties {
 
     public List<List<String>> getNestedPropertyLists(String initialPropertyType, String... nestedProperties) {
         JSONObject initialProperty = propertiesByType.get(initialPropertyType);
+        if (initialProperty == null) {
+            return null;
+        }
         try {
             JSONArray initialValues = initialProperty.getJSONArray("values");
             List<List<String>> nestedPropertyLists = new ArrayList<List<String>>();
@@ -261,19 +260,23 @@ public class EntityProperties {
                     if (nestedProperty == null) {
                         nestedPropertyList.add("");
                     } else {
-                        nestedPropertyList.add(
-                                nestedProperty
-                                        .getJSONArray("values")
-                                        .getJSONObject(0)
-                                        .getString("text")
-                        );
+                        JSONArray nestedPropertyValues = nestedProperty.getJSONArray("values");
+                        if (nestedPropertyValues.length() == 0) {
+                            nestedPropertyList.add("");
+                        } else {
+                            nestedPropertyList.add(
+                                    nestedPropertyValues
+                                            .getJSONObject(0)
+                                            .getString("text")
+                            );
+                        }
                     }
                 }
                 nestedPropertyLists.add(nestedPropertyList);
             }
             return nestedPropertyLists;
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            return null;
         }
     }
 
@@ -282,7 +285,7 @@ public class EntityProperties {
     }
 
     public List<List<String>> getLeadershipRoles() {
-        List<List<String>> leadershipRoles = getNestedPropertyLists(
+        return getNestedPropertyListsWithFromToConversions(
                 "/business/board_member/leader_of",
                 "/organization/leadership/organization",
                 "/organization/leadership/role",
@@ -290,12 +293,10 @@ public class EntityProperties {
                 "/organization/leadership/from",
                 "/organization/leadership/to"
         );
-        convertLastTwoColumnsToFromToDates(leadershipRoles);
-        return leadershipRoles;
     }
 
     public List<List<String>> getBoardMemberships() {
-        List<List<String>> leadershipRoles = getNestedPropertyLists(
+        return getNestedPropertyListsWithFromToConversions(
                 "/business/board_member/organization_board_memberships",
                 "/organization/organization_board_membership/organization",
                 "/organization/organization_board_membership/role",
@@ -303,11 +304,19 @@ public class EntityProperties {
                 "/organization/organization_board_membership/from",
                 "/organization/organization_board_membership/to"
         );
-        convertLastTwoColumnsToFromToDates(leadershipRoles);
-        return leadershipRoles;
+    }
+
+    private List<List<String>> getNestedPropertyListsWithFromToConversions(String initialPropertyType, String... nestedProperties) {
+        List<List<String>> nestedLists = getNestedPropertyLists(initialPropertyType, nestedProperties);
+        convertLastTwoColumnsToFromToDates(nestedLists);
+        return nestedLists;
     }
 
     private void convertLastTwoColumnsToFromToDates(List<List<String>> input) {
+        if (input == null) {
+            return;
+        }
+
         for (List<String> row : input) {
             int toDateIndex = row.size() - 1;
             int fromDateIndex = toDateIndex - 1;
@@ -320,7 +329,81 @@ public class EntityProperties {
 
             row.remove(toDateIndex);
             row.remove(fromDateIndex);
-            row.add(String.format("(%s / %s)", fromDate, toDate));
+            row.add(String.format("%s / %s", fromDate, toDate));
         }
+    }
+
+    public String getLeagueSport() {
+        return getSimpleText("/sports/sports_league/sport");
+    }
+
+    public String getOfficialWebsite() {
+        return getSimpleValue("/common/topic/official_website");
+    }
+
+    public String getChampionship() {
+        return getSimpleText("/sports/sports_league/championship");
+    }
+
+    public List<String> getTeams() {
+        return getExtractedNestedPropertyList("/sports/sports_league/teams", "/sports/sports_league_participation/team");
+    }
+
+    public List<String> getExtractedNestedPropertyList(String initialPropertyType, String... nestedProperties) {
+        List<List<String>> nestedLists = getNestedPropertyLists(initialPropertyType, nestedProperties);
+        if (nestedLists == null) {
+            return null;
+        }
+        List<String> list = new LinkedList<String>();
+        for (List<String> nestedList : nestedLists) {
+            list.add(nestedList.get(0));
+        }
+        return list;
+    }
+
+
+    public String getTeamSport() {
+        return getSimpleText("/sports/sports_team/sport");
+    }
+
+    public List<String> getTeamArena() {
+        return getExtractedNestedPropertyList("/sports/sports_team/venue", "/sports/team_venue_relationship/venue");
+    }
+
+    public List<String> getTeamChampionShips() {
+        return getSimplePropertyList("/sports/sports_team/championships", "text");
+    }
+
+    public String getTeamFounded() {
+        return getSimpleValue("/sports/sports_team/founded");
+    }
+
+    public List<String> getTeamLeagues() {
+        return getExtractedNestedPropertyList("/sports/sports_team/league", "/sports/sports_league_participation/league");
+    }
+
+    public List<String> getTeamLocations() {
+        return getSimplePropertyList("/sports/sports_team/location", "text");
+    }
+
+    public List<List<String>> getTeamCoaches() {
+        return getNestedPropertyListsWithFromToConversions(
+                "/sports/sports_team/coaches",
+                "/sports/sports_team_coach_tenure/coach",
+                "/sports/sports_team_coach_tenure/position",
+                "/sports/sports_team_coach_tenure/from",
+                "/sports/sports_team_coach_tenure/to"
+        );
+    }
+
+    public List<List<String>> getTeamPlayers() {
+        return getNestedPropertyListsWithFromToConversions(
+                "/sports/sports_team/roster",
+                "/sports/sports_team_roster/player",
+                "/sports/sports_team_roster/position",
+                "/sports/sports_team_roster/number",
+                "/sports/sports_team_roster/from",
+                "/sports/sports_team_roster/to"
+        );
     }
 }

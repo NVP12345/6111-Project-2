@@ -16,7 +16,7 @@ public class ColumnInfoBoxRegion extends InfoBoxRegion {
         this.rows = rows;
         this.headers = headers;
 
-        if (rows.size() > 0) {
+        if (rows != null && rows.size() > 0) {
             int numColumns = headers.length;
             for (List<String> column : rows) {
                 if (numColumns != column.size()) {
@@ -28,7 +28,7 @@ public class ColumnInfoBoxRegion extends InfoBoxRegion {
 
     @Override
     public boolean isValid() {
-        return rows != null && rows.size() > 0 && ! rows.get(0).isEmpty();
+        return name != null && rows != null && rows.size() > 0 && ! rows.get(0).isEmpty();
     }
 
     @Override

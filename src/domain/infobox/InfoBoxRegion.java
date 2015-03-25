@@ -25,6 +25,10 @@ public abstract class InfoBoxRegion {
         return StringUtils.multiplyString(" ", indent);
     }
 
+    protected String buildBlankLine(int indent, int length) {
+        return StringUtils.multiplyString(" ", indent + length);
+    }
+
     protected String buildTextWithinWidth(String text, int width) {
         if (text.length() > width) {
             return text.substring(0, width - 4) + "... ";

@@ -10,8 +10,11 @@ public class SimpleTextInfoBoxRegion extends InfoBoxRegion {
 
     public SimpleTextInfoBoxRegion(String name, String value) {
         this.name = name;
+
         values = new LinkedList<String>();
-        values.add(value);
+        if (value != null) {
+            values.add(value);
+        }
     }
 
     public SimpleTextInfoBoxRegion(String name, List<String> values) {
@@ -21,7 +24,7 @@ public class SimpleTextInfoBoxRegion extends InfoBoxRegion {
 
     @Override
     public boolean isValid() {
-        return values != null && ! values.isEmpty();
+        return name != null && values != null && ! values.isEmpty();
     }
 
     @Override

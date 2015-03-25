@@ -18,7 +18,7 @@ public class WrappingTextInfoBoxRegion extends InfoBoxRegion {
 
     @Override
     public boolean isValid() {
-        return textAreas != null && ! textAreas.isEmpty();
+        return name != null && textAreas != null && ! textAreas.isEmpty();
     }
 
     @Override
@@ -27,7 +27,7 @@ public class WrappingTextInfoBoxRegion extends InfoBoxRegion {
         boolean first = true;
         Iterator<String> it = textAreas.iterator();
         while (it.hasNext()) {
-            String textArea = it.next();
+            String textArea = it.next().replace("\n", "");
             int nextIndex = 0;
             boolean newlineFound = false;
             while ( ! newlineFound && nextIndex < textArea.length() ) {
@@ -53,7 +53,7 @@ public class WrappingTextInfoBoxRegion extends InfoBoxRegion {
                 lines.add(sb.toString());
             }
             if (it.hasNext()) {
-                lines.add("\n\n");
+                lines.add(buildBlankLine(indent, length));
             }
         }
         return lines;
