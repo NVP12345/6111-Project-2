@@ -6,6 +6,7 @@ import java.util.List;
 
 public abstract class InfoBoxRegion {
 
+    public abstract boolean isValid();
     public abstract List<String> getLines(int indent, int length);
 
     protected String buildIndentWithName(int indent, String name) {
@@ -25,11 +26,12 @@ public abstract class InfoBoxRegion {
     }
 
     protected String buildTextWithinWidth(String text, int width) {
-        if (text.length() > width - 1) {
-            return text.substring(0, width - 5) + "...";
+        if (text.length() > width) {
+            return text.substring(0, width - 4) + "... ";
         } else {
             return text + StringUtils.multiplyString(" ", width - text.length());
         }
     }
+
 
 }

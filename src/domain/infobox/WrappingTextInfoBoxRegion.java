@@ -17,6 +17,11 @@ public class WrappingTextInfoBoxRegion extends InfoBoxRegion {
     }
 
     @Override
+    public boolean isValid() {
+        return textAreas != null && ! textAreas.isEmpty();
+    }
+
+    @Override
     public List<String> getLines(int indent, int length) {
         List<String> lines = new LinkedList<String>();
         boolean first = true;

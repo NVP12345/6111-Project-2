@@ -8,13 +8,15 @@ import java.util.List;
 public class InfoBox {
 
     private static final int NUM_INDENT_SPACES = 10;
-    private static final int REGION_INDENT = 16;
-    private static final int REGION_LENGTH = 82;
+    private static final int REGION_INDENT = 17;
+    private static final int REGION_LENGTH = 83;
     private static final String BOUNDARY = "|";
     private final List<InfoBoxRegion> regions = new LinkedList<InfoBoxRegion>();
 
     public void addRegion(InfoBoxRegion infoBoxRegion) {
-        regions.add(infoBoxRegion);
+        if (infoBoxRegion.isValid()) {
+            regions.add(infoBoxRegion);
+        }
     }
 
     @Override

@@ -4,7 +4,6 @@ import domain.Entity;
 import domain.EntityProperties;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.net.URLCodec;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +17,6 @@ import java.util.List;
 
 public class FreebaseApiUtil {
 
-    public static final int NUMBER_OF_RESULTS = 10;
     private static final String INITIAL_FREEBASE_SEARCH_URL_FORMAT = "https://www.googleapis.com/freebase/v1/search?key=%s&query=%s";
     private static final String INITIAL_FREEBASE_TOPIC_URL_FORMAT = "https://www.googleapis.com/freebase/v1/topic%s?key=%s";
 

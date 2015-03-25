@@ -20,6 +20,11 @@ public class SimpleTextInfoBoxRegion extends InfoBoxRegion {
     }
 
     @Override
+    public boolean isValid() {
+        return values != null && ! values.isEmpty();
+    }
+
+    @Override
     public List<String> getLines(int indent, int length) {
         List<String> lines = new LinkedList<String>();
         boolean first = true;

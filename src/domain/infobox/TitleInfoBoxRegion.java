@@ -34,6 +34,11 @@ public class TitleInfoBoxRegion extends InfoBoxRegion {
     }
 
     @Override
+    public boolean isValid() {
+        return true;
+    }
+
+    @Override
     public List<String> getLines(int indent, int length) {
         int columns = indent + length;
         int columnDifference = columns - title.length();

@@ -3,8 +3,8 @@ package domain;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import util.FreebaseApiUtil;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -244,29 +244,83 @@ public class EntityProperties {
         return getSimplePropertyList("/influence/influence_node/influenced", "text");
     }
 
-    public List<FilmData> getFilms() {
-        JSONObject filmActorProperty = propertiesByType.get("/film/actor/film");
+    public List<List<String>> getFilms() {
+        return getNestedPropertyLists("/film/actor/film", "/film/performance/character", "/film/performance/film");
+    }
+
+    public List<List<String>> getNestedPropertyLists(String initialPropertyType, String... nestedProperties) {
+        JSONObject initialProperty = propertiesByType.get(initialPropertyType);
         try {
-            JSONArray filmActorValues = filmActorProperty.getJSONArray("values");
-            List<FilmData> films = new LinkedList<FilmData>();
-            for (int i = 0; i < filmActorValues.length(); i++) {
-                JSONObject filmProperty = filmActorValues.getJSONObject(i).getJSONObject("property");
-                films.add(new FilmData(
-                        filmProperty
-                                .getJSONObject("/film/performance/character")
-                                .getJSONArray("values")
-                                .getJSONObject(0)
-                                .getString("text"),
-                        filmProperty
-                                .getJSONObject("/film/performance/film")
-                                .getJSONArray("values")
-                                .getJSONObject(0)
-                                .getString("text")
-                ));
+            JSONArray initialValues = initialProperty.getJSONArray("values");
+            List<List<String>> nestedPropertyLists = new ArrayList<List<String>>();
+            for (int i = 0; i < initialValues.length(); i++) {
+                JSONObject property = initialValues.getJSONObject(i).getJSONObject("property");
+                List<String> nestedPropertyList = new ArrayList<String>();
+                for (String nestedPropertyKey : nestedProperties) {
+                    JSONObject nestedProperty = property.optJSONObject(nestedPropertyKey);
+                    if (nestedProperty == null) {
+                        nestedPropertyList.add("");
+                    } else {
+                        nestedPropertyList.add(
+                                nestedProperty
+                                        .getJSONArray("values")
+                                        .getJSONObject(0)
+                                        .getString("text")
+                        );
+                    }
+                }
+                nestedPropertyLists.add(nestedPropertyList);
             }
-            return films;
+            return nestedPropertyLists;
         } catch (JSONException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public List<String> getOrganizationsFounded() {
+        return getSimplePropertyList("/organization/organization_founder/organizations_founded", "text");
+    }
+
+    public List<List<String>> getLeadershipRoles() {
+        List<List<String>> leadershipRoles = getNestedPropertyLists(
+                "/business/board_member/leader_of",
+                "/organization/leadership/organization",
+                "/organization/leadership/role",
+                "/organization/leadership/title",
+                "/organization/leadership/from",
+                "/organization/leadership/to"
+        );
+        convertLastTwoColumnsToFromToDates(leadershipRoles);
+        return leadershipRoles;
+    }
+
+    public List<List<String>> getBoardMemberships() {
+        List<List<String>> leadershipRoles = getNestedPropertyLists(
+                "/business/board_member/organization_board_memberships",
+                "/organization/organization_board_membership/organization",
+                "/organization/organization_board_membership/role",
+                "/organization/organization_board_membership/title",
+                "/organization/organization_board_membership/from",
+                "/organization/organization_board_membership/to"
+        );
+        convertLastTwoColumnsToFromToDates(leadershipRoles);
+        return leadershipRoles;
+    }
+
+    private void convertLastTwoColumnsToFromToDates(List<List<String>> input) {
+        for (List<String> row : input) {
+            int toDateIndex = row.size() - 1;
+            int fromDateIndex = toDateIndex - 1;
+            String fromDate = row.get(fromDateIndex);
+            String toDate = row.get(toDateIndex);
+
+            if (toDate.isEmpty()) {
+                toDate = "now";
+            }
+
+            row.remove(toDateIndex);
+            row.remove(fromDateIndex);
+            row.add(String.format("(%s / %s)", fromDate, toDate));
         }
     }
 }

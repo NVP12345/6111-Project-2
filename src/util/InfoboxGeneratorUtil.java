@@ -3,7 +3,7 @@ package util;
 import domain.Entity;
 import domain.EntityProperties;
 import domain.EntityType;
-import domain.infobox.FilmInfoBoxRegion;
+import domain.infobox.ColumnInfoBoxRegion;
 import domain.infobox.InfoBox;
 import domain.infobox.TitleInfoBoxRegion;
 import domain.infobox.SimpleTextInfoBoxRegion;
@@ -91,11 +91,27 @@ public class InfoboxGeneratorUtil {
     }
 
     private static void addActorRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
-        infoBox.addRegion(new FilmInfoBoxRegion(entityProperties.getFilms()));
+        infoBox.addRegion(new ColumnInfoBoxRegion("Films", entityProperties.getFilms(), "Character", "Film"));
     }
 
     private static void addBusinessPersonRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
-
+        infoBox.addRegion(new SimpleTextInfoBoxRegion("Founded", entityProperties.getOrganizationsFounded()));
+        infoBox.addRegion(new ColumnInfoBoxRegion(
+                "Leadership",
+                entityProperties.getLeadershipRoles(),
+                "Organization",
+                "Role",
+                "Title",
+                "From / To"
+        ));
+        infoBox.addRegion(new ColumnInfoBoxRegion(
+                "Board Member",
+                entityProperties.getBoardMemberships(),
+                "Organization",
+                "Role",
+                "Title",
+                "From / To"
+        ));
     }
 
     private static void addLeagueRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
