@@ -92,6 +92,7 @@ public class InfoboxGeneratorUtil {
 
     private static void addActorRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
         infoBox.addRegion(new ColumnInfoBoxRegion("Films", entityProperties.getFilms(), "Character", "Film"));
+        infoBox.addRegion(new ColumnInfoBoxRegion("TV Shows", entityProperties.getTvShows(), "Character", "TV Show"));
     }
 
     private static void addBusinessPersonRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {

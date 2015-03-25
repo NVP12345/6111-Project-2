@@ -254,6 +254,10 @@ public class EntityProperties {
         return getNestedPropertyLists("/film/actor/film", "/film/performance/character", "/film/performance/film");
     }
 
+    public List<List<String>> getTvShows() {
+        return getNestedPropertyLists("/tv/tv_actor/starring_roles", "/tv/regular_tv_appearance/character", "/tv/regular_tv_appearance/series");
+    }
+
     public List<List<String>> getNestedPropertyLists(String initialPropertyType, String... nestedProperties) {
         JSONObject initialProperty = propertiesByType.get(initialPropertyType);
         if (initialProperty == null) {
@@ -416,4 +420,5 @@ public class EntityProperties {
                 "/sports/sports_team_roster/to"
         );
     }
+
 }
