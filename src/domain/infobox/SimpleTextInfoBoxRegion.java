@@ -1,7 +1,5 @@
 package domain.infobox;
 
-import util.StringUtils;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,13 +31,7 @@ public class SimpleTextInfoBoxRegion extends InfoBoxRegion {
             } else {
                 sb.append(buildBlankIndent(indent));
             }
-            if (value.length() > length - 1) {
-                sb.append(value.substring(0, value.length() - 5));
-                sb.append("...");
-            } else {
-                sb.append(value);
-            }
-            sb.append(StringUtils.multiplyString(" ", length - value.length()));
+            sb.append(buildTextWithinWidth(value, length));
             lines.add(sb.toString());
         }
         return lines;

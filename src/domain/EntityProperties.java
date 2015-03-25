@@ -243,4 +243,30 @@ public class EntityProperties {
     public List<String> getInfluenced() {
         return getSimplePropertyList("/influence/influence_node/influenced", "text");
     }
+
+    public List<FilmData> getFilms() {
+        JSONObject filmActorProperty = propertiesByType.get("/film/actor/film");
+        try {
+            JSONArray filmActorValues = filmActorProperty.getJSONArray("values");
+            List<FilmData> films = new LinkedList<FilmData>();
+            for (int i = 0; i < filmActorValues.length(); i++) {
+                JSONObject filmProperty = filmActorValues.getJSONObject(i).getJSONObject("property");
+                films.add(new FilmData(
+                        filmProperty
+                                .getJSONObject("/film/performance/character")
+                                .getJSONArray("values")
+                                .getJSONObject(0)
+                                .getString("text"),
+                        filmProperty
+                                .getJSONObject("/film/performance/film")
+                                .getJSONArray("values")
+                                .getJSONObject(0)
+                                .getString("text")
+                ));
+            }
+            return films;
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

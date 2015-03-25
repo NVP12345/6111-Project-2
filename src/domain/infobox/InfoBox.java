@@ -8,7 +8,7 @@ import java.util.List;
 public class InfoBox {
 
     private static final int NUM_INDENT_SPACES = 10;
-    private static final int REGION_INDENT = 17;
+    private static final int REGION_INDENT = 16;
     private static final int REGION_LENGTH = 82;
     private static final String BOUNDARY = "|";
     private final List<InfoBoxRegion> regions = new LinkedList<InfoBoxRegion>();
@@ -35,10 +35,11 @@ public class InfoBox {
     }
 
     private String buildLineSeparator() {
-        return buildIndentSpaces() + " " + StringUtils.multiplyString("-", REGION_INDENT + REGION_LENGTH + 1) + "\n";
+        return buildIndentSpaces() + " " + StringUtils.multiplyString("-", REGION_INDENT + REGION_LENGTH ) + "\n";
     }
 
     private String buildIndentSpaces() {
         return StringUtils.multiplyString(" ", NUM_INDENT_SPACES);
     }
+
 }

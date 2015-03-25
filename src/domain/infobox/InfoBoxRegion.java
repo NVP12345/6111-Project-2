@@ -24,4 +24,12 @@ public abstract class InfoBoxRegion {
         return StringUtils.multiplyString(" ", indent);
     }
 
+    protected String buildTextWithinWidth(String text, int width) {
+        if (text.length() > width - 1) {
+            return text.substring(0, width - 5) + "...";
+        } else {
+            return text + StringUtils.multiplyString(" ", width - text.length());
+        }
+    }
+
 }

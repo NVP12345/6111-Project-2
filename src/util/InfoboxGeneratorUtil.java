@@ -3,6 +3,7 @@ package util;
 import domain.Entity;
 import domain.EntityProperties;
 import domain.EntityType;
+import domain.infobox.FilmInfoBoxRegion;
 import domain.infobox.InfoBox;
 import domain.infobox.TitleInfoBoxRegion;
 import domain.infobox.SimpleTextInfoBoxRegion;
@@ -90,7 +91,7 @@ public class InfoboxGeneratorUtil {
     }
 
     private static void addActorRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
-
+        infoBox.addRegion(new FilmInfoBoxRegion(entityProperties.getFilms()));
     }
 
     private static void addBusinessPersonRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
