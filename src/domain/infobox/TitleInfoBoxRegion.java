@@ -15,16 +15,20 @@ public class TitleInfoBoxRegion extends InfoBoxRegion {
         StringBuilder sb = new StringBuilder();
         sb.append(title);
 
-        if ( types.size() > 1 || ! EntityType.PERSON.equals(types.get(0)) ) {
+        Iterator<EntityType> it;
+        if (types.size() > 1 && EntityType.PERSON.equals(types.get(0))) {
+            it = types.subList(1, types.size()).iterator();
+        } else {
+            it = types.iterator();
+        }
+
+        if ( it.hasNext() ) {
             sb.append("(");
-            Iterator<EntityType> it = types.iterator();
             while(it.hasNext()) {
                 EntityType type = it.next();
-                if ( ! EntityType.PERSON.equals(type) ) {
-                    sb.append(type.name());
-                    if (it.hasNext()) {
-                        sb.append(", ");
-                    }
+                sb.append(type.name());
+                if (it.hasNext()) {
+                    sb.append(", ");
                 }
             }
             sb.append(")");

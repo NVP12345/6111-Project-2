@@ -56,6 +56,14 @@ public class EntityProperties {
                     uniqueEntityTypes.add(FREEBASE_TYPES_TO_ENTITY_TYPES.get(typeId));
                 }
             }
+
+            if (uniqueEntityTypes.contains(EntityType.LEAGUE) || uniqueEntityTypes.contains(EntityType.SPORTS_TEAM)) {
+                uniqueEntityTypes.remove(EntityType.PERSON);
+                uniqueEntityTypes.remove(EntityType.ACTOR);
+                uniqueEntityTypes.remove(EntityType.AUTHOR);
+                uniqueEntityTypes.remove(EntityType.BUSINESS_PERSON);
+            }
+
             entityTypes = new LinkedList<EntityType>(uniqueEntityTypes);
             Collections.sort(entityTypes, new Comparator<EntityType>() {
                 @Override
@@ -89,17 +97,13 @@ public class EntityProperties {
         return getSimpleProperty(type, "text");
     }
 
-    public String getDocumentText() {
-        return getSimpleValue("/common/document/text");
-    }
-
     private String getSimpleValue(String type) {
         return getSimpleProperty(type, "value");
     }
 
     private String getSimpleProperty(String type, String propertyName) {
         List<String> properties = getSimplePropertyList(type, propertyName);
-        if (properties == null) {
+        if (properties == null || properties.isEmpty()) {
             return null;
         }
         return properties.get(0);
@@ -130,6 +134,9 @@ public class EntityProperties {
     public List<String> getSiblings() {
         List<String> siblings = new LinkedList<String>();
         JSONObject siblingsProperty = propertiesByType.get("/people/person/sibling_s");
+        if (siblingsProperty == null) {
+            return null;
+        }
         try {
             JSONArray valueArray = siblingsProperty.getJSONArray("values");
             for (int i = 0; i < valueArray.length(); i++) {
@@ -149,6 +156,9 @@ public class EntityProperties {
     public List<String> getSpouses() {
         List<String> spouses = new LinkedList<String>();
         JSONObject spousesProperty = propertiesByType.get("/people/person/spouse_s");
+        if (spousesProperty == null) {
+            return null;
+        }
         try {
             JSONArray valueArray = spousesProperty.getJSONArray("values");
             for (int i = 0; i < valueArray.length(); i++) {
