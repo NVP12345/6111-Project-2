@@ -57,6 +57,7 @@ public class EntityProperties {
                 }
             }
 
+            // Restrict leagues and sports teams from also being authors, etc.
             if (uniqueEntityTypes.contains(EntityType.LEAGUE) || uniqueEntityTypes.contains(EntityType.SPORTS_TEAM)) {
                 uniqueEntityTypes.remove(EntityType.PERSON);
                 uniqueEntityTypes.remove(EntityType.ACTOR);

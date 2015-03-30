@@ -91,6 +91,7 @@ public class InfoboxGeneratorUtil {
     }
 
     private static void addActorRegionsToInfoBox(InfoBox infoBox, EntityProperties entityProperties) {
+        // Always include both Films and TV shows to make sure some credits appear for all actors
         infoBox.addRegion(new ColumnInfoBoxRegion("Films", entityProperties.getFilms(), "Character", "Film"));
         infoBox.addRegion(new ColumnInfoBoxRegion("TV Shows", entityProperties.getTvShows(), "Character", "TV Show"));
     }

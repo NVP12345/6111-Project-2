@@ -27,6 +27,17 @@ b)The following is a list of all the files that we are submitting:
                  build.xml
 > text files:
                  README.txt
+                 transcript_infobox_billgates
+                 transcript_infobox_jackson
+                 transcript_infobox_miamiheat
+                 transcript_infobox_nba
+                 transcript_infobox_nfl
+                 transcript_infobox_nyknicks
+                 transcript_infobox_robertdowneyjr
+                 transcript_question_google
+                 transcript_question_lordoftherings
+                 transcript_question_microsoft
+                 transcript_question_romeoandjuliet
 
 
 c)The language used for the implementation of this code is Java. The main file that should be executed is Project2Main.java.
@@ -51,3 +62,9 @@ e) (No part e specified in the project description)
 
 f) Freebase API key: AIzaSyBrtC56P8AyVaw9scsNSpYe-r1uJiTiRzE
 
+g) There is logic in the EntityProperties constructor (lines 61 through 65) that ensure leagues are not also attributed as authors (to
+   be safe, we exclude all types associated with being a Person when the entity in question is either a league or sports team).
+
+   To make sure actors are always attributed with some credits (since we consider TV actors as well as film actors, there could be actors
+   with only TV credits where the reference program would print no films) we always print both TV and film credits. This logic can be
+   found in InfoboxGeneratorUtil (lines 95 and 96).
